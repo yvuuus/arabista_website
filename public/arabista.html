@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Arabista Coffee — Une Explosion de Saveurs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Italianno&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&family=Cairo:wght@300;400;500;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #E8630A;
+      --orange-light: #FF8C38;
+      --orange-dark: #B84D00;
+      --gold: #DAA520;
+      --gold-light: #FFD700;
+      --purple: #4A2E6B;
+      --purple-light: #7B52A6;
+      --black: #0A0A0A;
+      --dark: #111111;
+      --white: #FAFAFA;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--black); color: var(--white); overflow-x: hidden; transition: font-family 0.2s; }
+    html[dir="rtl"] body { font-family: 'Cairo', 'DM Sans', sans-serif; }
+    html[dir="rtl"] .section-title,
+    html[dir="rtl"] .hero-tagline-big,
+    html[dir="rtl"] h3,
+    html[dir="rtl"] .roast-name,
+    html[dir="rtl"] .cap-card h3 { font-family: 'Cairo', 'Playfair Display', serif; }
+
+    /* ── BRAND FONT ── */
+    .brand-font {
+      font-family: 'Italianno', cursive;
+      font-size: 3.5rem;
+      color: var(--orange);
+      line-height: 1;
+      letter-spacing: 0.01em;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 6vw;
+      background: rgba(10,10,10,0.9);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(232,99,10,0.15);
+      gap: 1rem;
+    }
+    .nav-brand { display: flex; flex-direction: column; gap: 0; }
+    .nav-logo { font-family: 'Italianno', cursive; font-size: 2.4rem; color: var(--orange); line-height: 1; letter-spacing: 0.02em; }
+    .nav-tagline { font-size: 0.58rem; color: rgba(250,250,250,0.3); letter-spacing: 0.2em; text-transform: uppercase; margin-top: -2px; }
+    .nav-right { display: flex; align-items: center; gap: 2.5rem; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { color: var(--white); text-decoration: none; font-size: 0.82rem; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.6; transition: opacity 0.2s, color 0.2s; }
+    .nav-links a:hover { opacity: 1; color: var(--orange-light); }
+
+    /* ── LANGUAGE SWITCHER ── */
+    .lang-switch { display: flex; align-items: center; gap: 2px; border: 1px solid rgba(232,99,10,0.25); border-radius: 20px; padding: 3px; background: rgba(255,255,255,0.02); flex-shrink: 0; }
+    .lang-btn {
+      appearance: none; -webkit-appearance: none; border: none; background: transparent; cursor: pointer;
+      color: rgba(250,250,250,0.45); font-family: 'DM Sans', sans-serif; font-size: 0.68rem; font-weight: 500;
+      letter-spacing: 0.06em; text-transform: uppercase; padding: 0.4rem 0.75rem; border-radius: 16px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .lang-btn:hover { color: var(--white); }
+    .lang-btn.active { background: var(--orange); color: var(--white); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 9rem 6vw 5rem; position: relative; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 55% 45% at 50% 60%, rgba(74,46,107,0.35) 0%, transparent 70%),
+        radial-gradient(ellipse 35% 28% at 72% 28%, rgba(232,99,10,0.16) 0%, transparent 60%),
+        var(--black);
+    }
+    .hero-bg::after {
+      content: ''; position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.25; pointer-events: none;
+    }
+    .hero-ring { position: absolute; border-radius: 50%; border: 1px solid rgba(232,99,10,0.08); animation: pulse 7s ease-in-out infinite; }
+    .ring1 { width: 440px; height: 440px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+    .ring2 { width: 700px; height: 700px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-delay: 1.8s; }
+    .ring3 { width: 1000px; height: 1000px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-delay: 3.5s; }
+    @keyframes pulse { 0%,100%{opacity:0.2}50%{opacity:0.55} }
+
+    .hero-eyebrow { position: relative; z-index: 1; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--orange-light); margin-bottom: 0.8rem; }
+    .hero-brand { position: relative; z-index: 1; font-family: 'Italianno', cursive; font-size: clamp(5rem, 16vw, 12rem); color: var(--orange); line-height: 0.9; margin-bottom: 0.4rem; text-shadow: 0 0 80px rgba(232,99,10,0.25); }
+    .hero-tagline-big { position: relative; z-index: 1; font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(0.9rem, 2vw, 1.3rem); color: rgba(250,250,250,0.38); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.8rem; }
+    .hero-subtitle { position: relative; z-index: 1; font-size: clamp(0.9rem, 1.6vw, 1.05rem); font-weight: 300; color: rgba(250,250,250,0.48); max-width: 440px; line-height: 1.8; margin-bottom: 3rem; }
+    .hero-cta { position: relative; z-index: 1; display: inline-block; background: var(--orange); color: var(--white); text-decoration: none; padding: 0.95rem 2.8rem; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; border-radius: 2px; transition: background 0.25s, transform 0.2s, box-shadow 0.25s; }
+    .hero-cta:hover { background: var(--orange-light); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(232,99,10,0.3); }
+    .hero-scroll { position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; color: rgba(250,250,250,0.25); font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; }
+    .scroll-line { width: 1px; height: 45px; background: linear-gradient(to bottom, rgba(232,99,10,0.65), transparent); animation: scrollDown 2.2s ease-in-out infinite; }
+    @keyframes scrollDown { 0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom} }
+
+    /* ── SHARED ── */
+    section { padding: 7rem 6vw; }
+    .section-label { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: var(--orange); margin-bottom: 0.8rem; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 700; line-height: 1.1; margin-bottom: 1.5rem; }
+    .section-title em { font-style: italic; color: var(--orange-light); }
+    html[dir="rtl"] .section-title em { font-style: normal; }
+
+    /* ── ABOUT ── */
+    .about { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); }
+    .about-text p { color: rgba(250,250,250,0.5); line-height: 1.85; font-size: 0.98rem; margin-bottom: 1.2rem; font-weight: 300; }
+    .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .stat-box { padding: 1.6rem; border: 1px solid rgba(232,99,10,0.18); border-radius: 3px; position: relative; overflow: hidden; }
+    .stat-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--orange); }
+    .stat-number { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; color: var(--orange); display: block; margin-bottom: 0.25rem; }
+    .stat-label { font-size: 0.72rem; color: rgba(250,250,250,0.38); text-transform: uppercase; letter-spacing: 0.1em; }
+
+    /* ── DIVIDER ── */
+    .divider { height: 1px; background: linear-gradient(to right, transparent, rgba(232,99,10,0.2), rgba(74,46,107,0.2), transparent); margin: 0 6vw; }
+
+    /* ── PRODUCTS ── */
+    .products { background: #090909; border-top: 1px solid rgba(255,255,255,0.04); }
+    .products-header { text-align: center; max-width: 600px; margin: 0 auto 5rem; }
+    .products-header p.sub { color: rgba(250,250,250,0.38); font-weight: 300; font-size: 0.98rem; line-height: 1.7; }
+
+    .cat-label {
+      font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(250,250,250,0.28); margin-bottom: 1.4rem;
+      padding-bottom: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.05);
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .cat-label::before { content: ''; flex: 1; max-width: 40px; height: 1px; background: var(--orange); opacity: 0.5; }
+
+    .product-block { margin-bottom: 4rem; }
+
+    /* ── CAPSULE CARDS ── */
+    .caps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+    .cap-card {
+      padding: 2rem 1.6rem; border-radius: 3px; position: relative;
+      overflow: hidden; transition: transform 0.3s, border-color 0.3s; cursor: default;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .cap-card:hover { transform: translateY(-6px); }
+
+    .cap-classic:hover { border-color: rgba(200,200,200,0.25); }
+    .cap-gold:hover { border-color: rgba(218,165,32,0.4); }
+    .cap-intense:hover { border-color: rgba(123,82,166,0.45); }
+
+    .cap-glow-el { position: absolute; top: -50px; right: -50px; width: 120px; height: 120px; border-radius: 50%; opacity: 0.08; transition: opacity 0.3s; }
+    html[dir="rtl"] .cap-glow-el { right: auto; left: -50px; }
+    .cap-card:hover .cap-glow-el { opacity: 0.18; }
+    .cap-card h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .cap-blend { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.06em; margin-bottom: 0.8rem; color: rgba(250,250,250,0.55); }
+    .cap-desc { font-size: 0.84rem; color: rgba(250,250,250,0.4); line-height: 1.7; font-weight: 300; }
+    .intensity-row { margin-top: 1.2rem; }
+    .intensity-head { display: flex; justify-content: space-between; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(250,250,250,0.28); margin-bottom: 5px; }
+    .int-track { height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
+    .int-fill { height: 100%; border-radius: 2px; }
+    .cap-compat { margin-top: 1rem; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(250,250,250,0.2); }
+
+    .type-badge {
+      display: inline-block; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase;
+      border-radius: 2px; padding: 3px 9px; margin-bottom: 1rem;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(250,250,250,0.4);
+    }
+    .type-badge.alu { background: rgba(232,99,10,0.08); border-color: rgba(232,99,10,0.25); color: var(--orange-light); }
+    .type-badge.hybrid { background: rgba(74,46,107,0.1); border-color: rgba(123,82,166,0.25); color: var(--purple-light); }
+
+    /* ── BEAN / GROUND CARDS ── */
+    .bean-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+    .bean-card {
+      padding: 2rem 1.8rem; border: 1px solid rgba(232,99,10,0.13); border-radius: 3px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .bean-card:hover { border-color: rgba(232,99,10,0.38); transform: translateY(-4px); }
+    .bean-card h3 { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .bean-variety { font-size: 0.68rem; letter-spacing: 0.13em; text-transform: uppercase; color: var(--orange); margin-bottom: 0.9rem; }
+    .bean-card p { font-size: 0.84rem; color: rgba(250,250,250,0.4); line-height: 1.7; font-weight: 300; }
+    .bean-tags { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 1rem; }
+    .btag { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid rgba(232,99,10,0.28); color: rgba(232,99,10,0.65); padding: 3px 9px; border-radius: 2px; }
+
+    /* ── ROAST CARDS ── */
+    .roast-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+    .roast-card {
+      padding: 1.8rem 1.6rem; border-radius: 3px; border: 1px solid rgba(255,255,255,0.06);
+      transition: transform 0.3s, border-color 0.3s; position: relative; overflow: hidden;
+    }
+    .roast-card:hover { transform: translateY(-5px); }
+
+    .roast-light { border-color: rgba(210,160,80,0.15); }
+    .roast-light:hover { border-color: rgba(210,160,80,0.4); }
+    .roast-medium { border-color: rgba(180,100,30,0.15); }
+    .roast-medium:hover { border-color: rgba(180,100,30,0.4); }
+    .roast-dark { border-color: rgba(50,30,20,0.3); }
+    .roast-dark:hover { border-color: rgba(100,60,30,0.5); }
+
+    .roast-header { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem; }
+    .roast-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+    .roast-name { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; }
+    .roast-label { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(250,250,250,0.3); margin-bottom: 0.7rem; }
+    .roast-card p { font-size: 0.83rem; color: rgba(250,250,250,0.4); line-height: 1.7; font-weight: 300; }
+    .roast-note { margin-top: 0.9rem; font-size: 0.7rem; letter-spacing: 0.08em; color: rgba(250,250,250,0.2); font-style: italic; }
+    html[dir="rtl"] .roast-note { font-style: normal; }
+
+    /* ── CONTACT ── */
+    .contact { border-top: 1px solid rgba(255,255,255,0.05); }
+    .contact-inner { max-width: 640px; margin: 0 auto; }
+    .contact-info { text-align: center; }
+    .contact-info p.intro { color: rgba(250,250,250,0.46); font-weight: 300; line-height: 1.8; font-size: 0.98rem; margin-bottom: 2.5rem; }
+    .contact-details { display: flex; flex-direction: column; gap: 1.1rem; text-align: left; }
+    html[dir="rtl"] .contact-details { text-align: right; }
+    .contact-item { display: flex; gap: 1rem; align-items: flex-start; }
+    .ci-icon { width: 38px; height: 38px; flex-shrink: 0; background: rgba(232,99,10,0.08); border: 1px solid rgba(232,99,10,0.18); border-radius: 3px; display: flex; align-items: center; justify-content: center; }
+    .ci-icon svg { width: 18px; height: 18px; display: block; }
+    .ci-label { font-size: 0.63rem; text-transform: uppercase; letter-spacing: 0.13em; color: rgba(250,250,250,0.28); margin-bottom: 2px; }
+    .ci-value { font-size: 0.93rem; color: var(--white); font-weight: 400; }
+    .ci-value a { color: var(--white); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.15); transition: color 0.2s, border-color 0.2s; }
+    .ci-value a:hover { color: var(--orange-light); border-color: var(--orange-light); }
+
+    /* ── FOOTER ── */
+    footer { padding: 2rem 6vw; border-top: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: space-between; }
+    .footer-logo { font-family: 'Italianno', cursive; font-size: 2rem; color: var(--orange); }
+    .footer-copy { font-size: 0.74rem; color: rgba(250,250,250,0.2); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: 0.74rem; color: rgba(250,250,250,0.25); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--orange-light); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .caps-grid { grid-template-columns: 1fr; }
+      .roast-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 0.9rem 5vw; }
+      .nav-links { display: none; }
+      .about { grid-template-columns: 1fr; gap: 3rem; }
+      .bean-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+      .footer-links { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-brand">
+       <img src="arabista.png" alt="Arabista" style="height: 80px; width: 100px; object-fit: contain;" />
+    </div>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="#about" data-i18n="nav_about">About</a></li>
+        <li><a href="#products" data-i18n="nav_products">Products</a></li>
+        <li><a href="#contact" data-i18n="nav_contact">Contact</a></li>
+      </ul>
+      <div class="lang-switch" role="group" aria-label="Language switcher">
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="fr">FR</button>
+        <button class="lang-btn" data-lang="ar">AR</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-ring ring1"></div>
+    <div class="hero-ring ring2"></div>
+    <div class="hero-ring ring3"></div>
+    <p class="hero-eyebrow" data-i18n="hero_eyebrow">Algerian Premium Coffee Brand</p>
+    <div class="hero-brand">Arabista</div>
+    <p class="hero-tagline-big" data-i18n="hero_tagline">Une Explosion de Saveurs</p>
+    <p class="hero-subtitle" data-i18n="hero_subtitle">From rich espresso blends to premium capsules and whole beans — crafted for every coffee moment.</p>
+    <a href="#products" class="hero-cta" data-i18n="hero_cta">Discover Our Range</a>
+    <div class="hero-scroll"><div class="scroll-line"></div><span data-i18n="hero_scroll">Scroll</span></div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="about-text">
+      <p class="section-label" data-i18n="about_label">Our Story</p>
+      <h2 class="section-title"><span data-i18n="about_title_1">Passion in </span><em data-i18n="about_title_em">every bean</em></h2>
+      <p data-i18n="about_p1">Arabista was built on a simple belief: that great coffee should be accessible without compromise. We source, roast, and package every product with uncompromising care.</p>
+      <p data-i18n="about_p2">Whether you prefer capsules for convenience, whole beans for ritual, or bulk for the craft — Arabista delivers an explosion of flavour, every single time.</p>
+    </div>
+    <div class="about-stats">
+      <div class="stat-box"><span class="stat-number">100%</span><span class="stat-label" data-i18n="stat1_label">Pure Arabica & Robusta</span></div>
+      <div class="stat-box"><span class="stat-number">7+</span><span class="stat-label" data-i18n="stat2_label">Product Lines</span></div>
+      <div class="stat-box"><span class="stat-number">×85</span><span class="stat-label" data-i18n="stat3_label">Cups per 1kg Bag</span></div>
+      <div class="stat-box"><span class="stat-number">∞</span><span class="stat-label" data-i18n="stat4_label">Good Mornings</span></div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PRODUCTS -->
+  <section class="products" id="products">
+    <div class="products-header">
+      <p class="section-label" data-i18n="products_label">Our Collection</p>
+      <h2 class="section-title"><span data-i18n="products_title_1">Find your </span><em data-i18n="products_title_em">perfect cup</em></h2>
+      <p class="sub" data-i18n="products_sub">Capsules, whole beans, ground espresso, and custom-roasted coffee — each crafted for a different moment.</p>
+    </div>
+
+    <!-- ════ CAPSULES ALUMINIUM ════ -->
+    <div class="product-block">
+      <p class="cat-label" data-i18n="cat1">Arabista Ultime — 100% Aluminium Capsules · Nespresso® Compatible</p>
+      <div class="caps-grid">
+
+        <div class="cap-card cap-gold">
+          <div class="cap-glow-el cap-glow" style="background:var(--gold)"></div>
+          <img src="arabistagoldaluminum.png" alt="Gold Capsule" style="width:calc(100% + 3.2rem);margin:-2rem -1.6rem 1.5rem -1.6rem;height:220px;object-fit:contain;display:block;background:#0a0a0a;" />
+          <span class="type-badge alu" data-i18n="badge_alu">100% Aluminium</span>
+          <div style="width:28px;height:4px;border-radius:2px;display:block;margin-bottom:1rem;background:var(--gold)"></div>
+          <h3 style="color:var(--gold)" data-i18n="cap_gold_name">Gold</h3>
+          <p style="font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.9rem;color:var(--gold)" data-i18n="cap_gold_sub">Espresso · Aromatic</p>
+          <p class="cap-blend" data-i18n="cap_gold_blend">100% Arabica</p>
+          <p class="cap-desc" data-i18n="cap_gold_desc">Pure Arabica luxury in every capsule. Refined honey sweetness, delicate floral hints, and a silky, smooth body.</p>
+          <div class="intensity-row">
+            <div class="intensity-head"><span data-i18n="intensity_label">Intensity</span><span>6/10</span></div>
+            <div class="int-track"><div class="int-fill" style="background:var(--gold);width:60%"></div></div>
+          </div>
+          <p class="cap-compat" data-i18n="compat_label">Nespresso® Compatible</p>
+        </div>
+
+        <div class="cap-card cap-intense">
+          <div class="cap-glow-el cap-glow" style="background:var(--purple-light)"></div>
+          <img src="arabistaintesealuminum.png" alt="Intense Capsule" style="width:calc(100% + 3.2rem);margin:-2rem -1.6rem 1.5rem -1.6rem;height:220px;object-fit:contain;display:block;background:#0a0a0a;" />
+          <span class="type-badge alu" data-i18n="badge_alu">100% Aluminium</span>
+          <div style="width:28px;height:4px;border-radius:2px;display:block;margin-bottom:1rem;background:var(--purple-light)"></div>
+          <h3 style="color:var(--purple-light)" data-i18n="cap_intense_name">Intense</h3>
+          <p style="font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.9rem;color:var(--purple-light)" data-i18n="cap_intense_sub">Espresso · Bold</p>
+          <p class="cap-blend" data-i18n="cap_intense_blend">70% Robusta · 30% Arabica</p>
+          <p class="cap-desc" data-i18n="cap_intense_desc">Full-bodied and uncompromising. Deep roasted character, powerful crema, and a lasting espresso finish.</p>
+          <div class="intensity-row">
+            <div class="intensity-head"><span data-i18n="intensity_label">Intensity</span><span>9/10</span></div>
+            <div class="int-track"><div class="int-fill" style="background:var(--purple-light);width:90%"></div></div>
+          </div>
+          <p class="cap-compat" data-i18n="compat_label">Nespresso® Compatible</p>
+        </div>
+
+        <div class="cap-card cap-classic">
+          <div class="cap-glow-el cap-glow" style="background:#aaa"></div>
+          <img src="arabistaclassicaluminum.png" alt="Classic Capsule" style="width:calc(100% + 3.2rem);margin:-2rem -1.6rem 1.5rem -1.6rem;height:220px;object-fit:contain;display:block;background:#0a0a0a;" />
+          <span class="type-badge alu" data-i18n="badge_alu">100% Aluminium</span>
+          <div style="width:28px;height:4px;border-radius:2px;display:block;margin-bottom:1rem;background:#c8c8c8"></div>
+          <h3 style="color:#c8c8c8" data-i18n="cap_classic_name">Classic</h3>
+          <p style="font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.9rem;color:#aaa" data-i18n="cap_classic_sub">Espresso · Balanced</p>
+          <p class="cap-blend" data-i18n="cap_classic_blend">50% Arabica · 50% Robusta</p>
+          <p class="cap-desc" data-i18n="cap_classic_desc">The perfect everyday espresso. Smooth caramel notes, balanced body, and a clean, satisfying finish.</p>
+          <div class="intensity-row">
+            <div class="intensity-head"><span data-i18n="intensity_label">Intensity</span><span>4/10</span></div>
+            <div class="int-track"><div class="int-fill" style="background:#c8c8c8;width:40%"></div></div>
+          </div>
+          <p class="cap-compat" data-i18n="compat_label">Nespresso® Compatible</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════ CAPSULES ALUMINIUM + PLASTIC ════ -->
+    <div class="product-block">
+      <p class="cat-label" data-i18n="cat2">Arabista — Aluminium + Plastic Capsules · Nespresso® Compatible</p>
+      <div class="caps-grid">
+
+        <div class="cap-card cap-gold" style="border-color:rgba(218,165,32,0.1)">
+          <div class="cap-glow-el" style="background:var(--gold)"></div>
+          <img src="arabistagold.jpe" alt="Arabista gold" style="width:calc(100% + 3.2rem);margin:-2rem -1.6rem 1.5rem -1.6rem;height:220px;object-fit:contain;display:block;background:#0a0a0a;" />
+          <span class="type-badge hybrid" data-i18n="badge_hybrid">Aluminium + Plastic</span>
+          <div style="width:28px;height:4px;border-radius:2px;display:block;margin-bottom:1rem;background:var(--gold)"></div>
+          <h3 style="color:var(--gold)" data-i18n="cap_gold_name">Gold</h3>
+          <p style="font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.9rem;color:var(--gold)" data-i18n="cap_gold_sub">Espresso · Aromatic</p>
+          <p class="cap-blend" data-i18n="cap_gold_blend">100% Arabica</p>
+          <p class="cap-desc" data-i18n="cap_gold_desc_hybrid">All the aromatic richness of pure Arabica — floral, sweet, and smooth — in a more accessible capsule format.</p>
+          <div class="intensity-row">
+            <div class="intensity-head"><span data-i18n="intensity_label">Intensity</span><span>6/10</span></div>
+            <div class="int-track"><div class="int-fill" style="background:var(--gold);width:60%"></div></div>
+          </div>
+          <p class="cap-compat" data-i18n="compat_label">Nespresso® Compatible</p>
+        </div>
+
+        <div class="cap-card cap-intense" style="border-color:rgba(123,82,166,0.08)">
+          <div class="cap-glow-el" style="background:var(--purple-light)"></div>
+          <img src="arabistaintense.jpe" alt="Arabista intense" style="width:calc(100% + 3.2rem);margin:-2rem -1.6rem 1.5rem -1.6rem;height:220px;object-fit:contain;display:block;background:#0a0a0a;" />
+          <span class="type-badge hybrid" data-i18n="badge_hybrid">Aluminium + Plastic</span>
+          <div style="width:28px;height:4px;border-radius:2px;display:block;margin-bottom:1rem;background:var(--purple-light)"></div>
+          <h3 style="color:var(--purple-light)" data-i18n="cap_intense_name">Intense</h3>
+          <p style="font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.9rem;color:var(--purple-light)" data-i18n="cap_intense_sub">Espresso · Bold</p>
+          <p class="cap-blend" data-i18n="cap_intense_blend">70% Robusta · 30% Arabica</p>
+          <p class="cap-desc" data-i18n="cap_intense_desc_hybrid">Bold, dark, and powerful. The same intense Robusta character in a convenient everyday capsule.</p>
+          <div class="intensity-row">
+            <div class="intensity-head"><span data-i18n="intensity_label">Intensity</span><span>9/10</span></div>
+            <div class="int-track"><div class="int-fill" style="background:var(--purple-light);width:90%"></div></div>
+          </div>
+          <p class="cap-compat" data-i18n="compat_label">Nespresso® Compatible</p>
+        </div>
+
+        <div class="cap-card cap-classic" style="border-color:rgba(200,200,200,0.05)">
+          <div class="cap-glow-el" style="background:#aaa"></div>
+          <img src="arabistaclassic.jpe" alt="Arabista classic" style="width:calc(100% + 3.2rem);margin:-2rem -1.6rem 1.5rem -1.6rem;height:220px;object-fit:contain;display:block;background:#0a0a0a;" />
+          <span class="type-badge hybrid" data-i18n="badge_hybrid">Aluminium + Plastic</span>
+          <div style="width:28px;height:4px;border-radius:2px;display:block;margin-bottom:1rem;background:#c8c8c8"></div>
+          <h3 style="color:#c8c8c8" data-i18n="cap_classic_name">Classic</h3>
+          <p style="font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.9rem;color:#aaa" data-i18n="cap_classic_sub">Espresso · Balanced</p>
+          <p class="cap-blend" data-i18n="cap_classic_blend">50% Arabica · 50% Robusta</p>
+          <p class="cap-desc" data-i18n="cap_classic_desc_hybrid">Balanced and approachable. Your reliable daily espresso with gentle caramel notes and a smooth finish.</p>
+          <div class="intensity-row">
+            <div class="intensity-head"><span data-i18n="intensity_label">Intensity</span><span>4/10</span></div>
+            <div class="int-track"><div class="int-fill" style="background:#c8c8c8;width:40%"></div></div>
+          </div>
+          <p class="cap-compat" data-i18n="compat_label">Nespresso® Compatible</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════ CAFÉ MOULU ════ -->
+    <div class="product-block">
+      <p class="cat-label" data-i18n="cat3">Café Moulu — Ground Coffee · Pur Espresso 100% Robusta</p>
+      <div class="bean-grid">
+        <div class="bean-card">
+          <img src="arabista1kg.jpe" alt="1kg Arabista" style="width:100%;height:auto;display:block;margin:0 0 1.5rem 0;" />
+          <h3 data-i18n="bean1_name">Café Moulu — 1kg</h3>
+          <p class="bean-variety" data-i18n="bean1_variety">100% Robusta · Espresso Grind · Retail</p>
+          <p data-i18n="bean1_desc">Pre-ground to the ideal espresso consistency. Ready the moment you are — in your machine, moka pot, or traditional dallah. 85 cups per bag.</p>
+          <div class="bean-tags">
+            <span class="btag" data-i18n="tag_ground">Ground</span>
+            <span class="btag">1kg</span>
+            <span class="btag" data-i18n="tag_85cups">×85 cups</span>
+            <span class="btag" data-i18n="tag_espresso_grind">Espresso Grind</span>
+          </div>
+        </div>
+        <div class="bean-card">
+          <img src="arabista5kg.jpe" alt="5kg Arabista" style="width:100%;height:auto;display:block;margin:0 0 1.5rem 0;" />
+          <h3 data-i18n="bean2_name">Café Moulu — 5kg</h3>
+          <p class="bean-variety" data-i18n="bean2_variety">100% Robusta · Espresso Grind · Professional</p>
+          <p data-i18n="bean2_desc">The same exceptional espresso ground coffee in a 5kg professional bag. Consistent quality for cafés, restaurants, and high-volume use.</p>
+          <div class="bean-tags">
+            <span class="btag" data-i18n="tag_ground">Ground</span>
+            <span class="btag">5kg</span>
+            <span class="btag" data-i18n="tag_professional">Professional</span>
+            <span class="btag" data-i18n="tag_espresso_grind">Espresso Grind</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ CAFÉ EN GRAINS ════ -->
+    <div class="product-block">
+      <p class="cat-label" data-i18n="cat4">Café en Grains — Whole Bean · 1kg · Sans Sucre Ajouté</p>
+      <div class="bean-grid">
+        <div class="bean-card">
+          <img src="100arabica.jpe" alt="100% Arabica" style="width:100%;height:auto;display:block;margin:0 0 1.5rem 0;" />
+          <h3 data-i18n="grain1_name">En Grains — 100% Arabica</h3>
+          <p class="bean-variety" data-i18n="grain1_variety">Pure Arabica · Orange Bag</p>
+          <p data-i18n="grain1_desc">Artisanally roasted whole Arabica beans with bright acidity, complex fruity notes, and a smooth lingering finish. Grind fresh for maximum flavour.</p>
+          <div class="bean-tags">
+            <span class="btag" data-i18n="tag_wholebean">Whole Bean</span>
+            <span class="btag">1kg</span>
+            <span class="btag" data-i18n="tag_85cups">×85 cups</span>
+            <span class="btag" data-i18n="tag_artisanal">Artisanal</span>
+          </div>
+        </div>
+        <div class="bean-card">
+          <img src="100robusta.jpe" alt="100% Robusta" style="width:100%;height:auto;display:block;margin:0 0 1.5rem 0;" />
+          <h3 data-i18n="grain2_name">En Grains — 100% Robusta</h3>
+          <p class="bean-variety" data-i18n="grain2_variety">Pure Robusta · Purple Bag</p>
+          <p data-i18n="grain2_desc">Bold, earthy whole Robusta beans with full body, strong crema, and rich bitterness. Perfect for espresso machines and moka pots.</p>
+          <div class="bean-tags">
+            <span class="btag" data-i18n="tag_wholebean">Whole Bean</span>
+            <span class="btag">1kg</span>
+            <span class="btag" data-i18n="tag_85cups">×85 cups</span>
+            <span class="btag" data-i18n="tag_artisanal">Artisanal</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ ROASTED COFFEE ON COMMAND ════ -->
+    <div class="product-block">
+      <p class="cat-label" data-i18n="cat5">Torréfaction sur Commande — Roasted Coffee · Made to Order</p>
+      <div class="roast-grid">
+
+        <div class="roast-card roast-light">
+          <img src="clearroast.jpe" alt="clear roast" style="width:calc(100% + 3.2rem);margin:-1.8rem -1.6rem 1.5rem -1.6rem;height:200px;object-fit:cover;object-position:center;display:block;background:#0a0a0a;" />
+          <div class="roast-header">
+            <div class="roast-dot" style="background:#D2A050;box-shadow:0 0 14px rgba(210,160,80,0.4)"></div>
+            <div class="roast-name" style="color:#D2A050" data-i18n="roast_light_name">Clear Roast</div>
+          </div>
+          <p class="roast-label" data-i18n="roast_light_label">Torréfaction Claire · Light</p>
+          <p data-i18n="roast_light_desc">A light, delicate roast that preserves the natural brightness and origin character of the bean. Vivid floral and fruity notes with a clean, tea-like finish.</p>
+          <p class="roast-note" data-i18n="roast_light_note">Ideal for filter, pour-over & specialty methods</p>
+        </div>
+
+        <div class="roast-card roast-medium">
+          <img src="mediumroast.jpe" alt="medium roast" style="width:calc(100% + 3.2rem);margin:-1.8rem -1.6rem 1.5rem -1.6rem;height:200px;object-fit:cover;object-position:center;display:block;background:#0a0a0a;" />
+          <div class="roast-header">
+            <div class="roast-dot" style="background:#B4641E;box-shadow:0 0 14px rgba(180,100,30,0.4)"></div>
+            <div class="roast-name" style="color:#B4641E" data-i18n="roast_medium_name">Medium Roast</div>
+          </div>
+          <p class="roast-label" data-i18n="roast_medium_label">Torréfaction Moyenne · Medium</p>
+          <p data-i18n="roast_medium_desc">The perfect balance of acidity and body. Caramel sweetness, rounded mouthfeel, and a smooth finish — suited to virtually every brewing method.</p>
+          <p class="roast-note" data-i18n="roast_medium_note">Ideal for espresso, moka pot & filter</p>
+        </div>
+
+        <div class="roast-card roast-dark">
+          <img src="blackroast.jpe" alt="black roast" style="width:calc(100% + 3.2rem);margin:-1.8rem -1.6rem 1.5rem -1.6rem;height:200px;object-fit:cover;object-position:center;display:block;background:#0a0a0a;" />
+          <div class="roast-header">
+            <div class="roast-dot" style="background:#2E1A0E;border:2px solid rgba(180,100,30,0.4);box-shadow:0 0 14px rgba(80,40,10,0.6)"></div>
+            <div class="roast-name" style="color:#C87941" data-i18n="roast_dark_name">Black Roast</div>
+          </div>
+          <p class="roast-label" data-i18n="roast_dark_label">Torréfaction Noire · Dark</p>
+          <p data-i18n="roast_dark_desc">An intense dark roast with smoky, bittersweet depth and a bold, lingering finish. Full crema and powerful character for those who take their coffee seriously.</p>
+          <p class="roast-note" data-i18n="roast_dark_note">Ideal for espresso, ristretto & strong brews</p>
+        </div>
+
+      </div>
+      <p style="margin-top:1.4rem;font-size:0.8rem;color:rgba(250,250,250,0.28);font-weight:300;" data-i18n="roast_footer_note">All roasts available on command — contact us to place your order and specify the bean origin (Arabica / Robusta / Blend) and quantity.</p>
+    </div>
+
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="contact-inner">
+      <div class="contact-info">
+        <p class="section-label" data-i18n="contact_label">Get In Touch</p>
+        <h2 class="section-title"><span data-i18n="contact_title_1">Let's talk </span><em data-i18n="contact_title_em">coffee</em></h2>
+        <p class="intro" data-i18n="contact_intro">Interested in our products, wholesale pricing, or a custom roast? Reach out — we're always happy to talk coffee.</p>
+        <div class="contact-details">
+
+          <div class="contact-item">
+            <div class="ci-icon" style="color:#E8630A;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <div><div class="ci-label" data-i18n="ci_phone">Phone</div><div class="ci-value"><a href="tel:+213793330395">0793 330 395</a></div></div>
+          </div>
+
+          <div class="contact-item">
+            <div class="ci-icon" style="color:#E8630A;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div><div class="ci-label" data-i18n="ci_location">Location</div><div class="ci-value"><a href="https://maps.google.com/?q=Algeria" target="_blank" rel="noopener" data-i18n="ci_location_value">Algeria</a></div></div>
+          </div>
+
+          <div class="contact-item">
+            <div class="ci-icon" style="color:#E8630A;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+            </div>
+            <div><div class="ci-label" data-i18n="ci_email">Email</div><div class="ci-value"><a href="mailto:eurlarabista@gmail.com">eurlarabista@gmail.com</a></div></div>
+          </div>
+
+          <div class="contact-item">
+            <div class="ci-icon" style="color:#E8630A;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </div>
+            <div><div class="ci-label" data-i18n="ci_instagram">Instagram</div><div class="ci-value"><a href="https://www.instagram.com/arabistaalgerie?igsi=cGl0MWhsdjZjdndx" target="_blank" rel="noopener">@arabistaalgerie</a></div></div>
+          </div>
+
+          <div class="contact-item">
+            <div class="ci-icon" style="color:#E8630A;">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64 0 3.33 2.76 5.7 5.69 5.7 3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3s-1.88.09-3.24-1.48z"/></svg>
+            </div>
+            <div><div class="ci-label" data-i18n="ci_tiktok">TikTok</div><div class="ci-value"><a href="https://www.tiktok.com/@user87681940?_r=1&_t=ZS-99D95fvC5k0" target="_blank" rel="noopener">@arabistaalgerie</a></div></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo"><img src="arabista.png" alt="Arabista" style="height: 80px; width: 100px; object-fit: contain;" /></div>
+    <div class="footer-copy" data-i18n="footer_copy">© 2025 Arabista Coffee · Une Explosion de Saveurs</div>
+    <div class="footer-links">
+      <a href="#home" data-i18n="footer_home">Home</a>
+      <a href="#products" data-i18n="footer_products">Products</a>
+      <a href="#contact" data-i18n="footer_contact">Contact</a>
+    </div>
+  </footer>
+
+  <script>
+    const translations = {
+      en: {
+        nav_about: "About", nav_products: "Products", nav_contact: "Contact",
+        hero_eyebrow: "Algerian Premium Coffee Brand",
+        hero_tagline: "An Explosion of Flavours",
+        hero_subtitle: "From rich espresso blends to premium capsules and whole beans — crafted for every coffee moment.",
+        hero_cta: "Discover Our Range", hero_scroll: "Scroll",
+        about_label: "Our Story", about_title_1: "Passion in ", about_title_em: "every bean",
+        about_p1: "Arabista was built on a simple belief: that great coffee should be accessible without compromise. We source, roast, and package every product with uncompromising care.",
+        about_p2: "Whether you prefer capsules for convenience, whole beans for ritual, or bulk for the craft — Arabista delivers an explosion of flavour, every single time.",
+        stat1_label: "Pure Arabica & Robusta", stat2_label: "Product Lines", stat3_label: "Cups per 1kg Bag", stat4_label: "Good Mornings",
+        products_label: "Our Collection", products_title_1: "Find your ", products_title_em: "perfect cup",
+        products_sub: "Capsules, whole beans, ground espresso, and custom-roasted coffee — each crafted for a different moment.",
+        cat1: "Arabista Ultime — 100% Aluminium Capsules · Nespresso® Compatible",
+        cat2: "Arabista — Aluminium + Plastic Capsules · Nespresso® Compatible",
+        cat3: "Café Moulu — Ground Coffee · Pur Espresso 100% Robusta",
+        cat4: "Café en Grains — Whole Bean · 1kg · Sans Sucre Ajouté",
+        cat5: "Torréfaction sur Commande — Roasted Coffee · Made to Order",
+        badge_alu: "100% Aluminium", badge_hybrid: "Aluminium + Plastic",
+        cap_gold_name: "Gold", cap_gold_sub: "Espresso · Aromatic", cap_gold_blend: "100% Arabica",
+        cap_gold_desc: "Pure Arabica luxury in every capsule. Refined honey sweetness, delicate floral hints, and a silky, smooth body.",
+        cap_gold_desc_hybrid: "All the aromatic richness of pure Arabica — floral, sweet, and smooth — in a more accessible capsule format.",
+        cap_intense_name: "Intense", cap_intense_sub: "Espresso · Bold", cap_intense_blend: "70% Robusta · 30% Arabica",
+        cap_intense_desc: "Full-bodied and uncompromising. Deep roasted character, powerful crema, and a lasting espresso finish.",
+        cap_intense_desc_hybrid: "Bold, dark, and powerful. The same intense Robusta character in a convenient everyday capsule.",
+        cap_classic_name: "Classic", cap_classic_sub: "Espresso · Balanced", cap_classic_blend: "50% Arabica · 50% Robusta",
+        cap_classic_desc: "The perfect everyday espresso. Smooth caramel notes, balanced body, and a clean, satisfying finish.",
+        cap_classic_desc_hybrid: "Balanced and approachable. Your reliable daily espresso with gentle caramel notes and a smooth finish.",
+        intensity_label: "Intensity", compat_label: "Nespresso® Compatible",
+        bean1_name: "Café Moulu — 1kg", bean1_variety: "100% Robusta · Espresso Grind · Retail",
+        bean1_desc: "Pre-ground to the ideal espresso consistency. Ready the moment you are — in your machine, moka pot, or traditional dallah. 85 cups per bag.",
+        bean2_name: "Café Moulu — 5kg", bean2_variety: "100% Robusta · Espresso Grind · Professional",
+        bean2_desc: "The same exceptional espresso ground coffee in a 5kg professional bag. Consistent quality for cafés, restaurants, and high-volume use.",
+        tag_ground: "Ground", tag_85cups: "×85 cups", tag_espresso_grind: "Espresso Grind", tag_professional: "Professional",
+        grain1_name: "En Grains — 100% Arabica", grain1_variety: "Pure Arabica · Orange Bag",
+        grain1_desc: "Artisanally roasted whole Arabica beans with bright acidity, complex fruity notes, and a smooth lingering finish. Grind fresh for maximum flavour.",
+        grain2_name: "En Grains — 100% Robusta", grain2_variety: "Pure Robusta · Purple Bag",
+        grain2_desc: "Bold, earthy whole Robusta beans with full body, strong crema, and rich bitterness. Perfect for espresso machines and moka pots.",
+        tag_wholebean: "Whole Bean", tag_artisanal: "Artisanal",
+        roast_light_name: "Clear Roast", roast_light_label: "Torréfaction Claire · Light",
+        roast_light_desc: "A light, delicate roast that preserves the natural brightness and origin character of the bean. Vivid floral and fruity notes with a clean, tea-like finish.",
+        roast_light_note: "Ideal for filter, pour-over & specialty methods",
+        roast_medium_name: "Medium Roast", roast_medium_label: "Torréfaction Moyenne · Medium",
+        roast_medium_desc: "The perfect balance of acidity and body. Caramel sweetness, rounded mouthfeel, and a smooth finish — suited to virtually every brewing method.",
+        roast_medium_note: "Ideal for espresso, moka pot & filter",
+        roast_dark_name: "Black Roast", roast_dark_label: "Torréfaction Noire · Dark",
+        roast_dark_desc: "An intense dark roast with smoky, bittersweet depth and a bold, lingering finish. Full crema and powerful character for those who take their coffee seriously.",
+        roast_dark_note: "Ideal for espresso, ristretto & strong brews",
+        roast_footer_note: "All roasts available on command — contact us to place your order and specify the bean origin (Arabica / Robusta / Blend) and quantity.",
+        contact_label: "Get In Touch", contact_title_1: "Let's talk ", contact_title_em: "coffee",
+        contact_intro: "Interested in our products, wholesale pricing, or a custom roast? Reach out — we're always happy to talk coffee.",
+        ci_phone: "Phone", ci_location: "Location", ci_location_value: "Algeria", ci_email: "Email", ci_instagram: "Instagram", ci_tiktok: "TikTok",
+        footer_copy: "© 2025 Arabista Coffee · An Explosion of Flavours",
+        footer_home: "Home", footer_products: "Products", footer_contact: "Contact"
+      },
+      fr: {
+        nav_about: "À propos", nav_products: "Produits", nav_contact: "Contact",
+        hero_eyebrow: "Marque de Café Premium Algérienne",
+        hero_tagline: "Une Explosion de Saveurs",
+        hero_subtitle: "Des mélanges d'espresso riches aux capsules premium et grains entiers — pensés pour chaque moment café.",
+        hero_cta: "Découvrir la Gamme", hero_scroll: "Défiler",
+        about_label: "Notre Histoire", about_title_1: "La passion dans ", about_title_em: "chaque grain",
+        about_p1: "Arabista est né d'une conviction simple : un excellent café doit être accessible sans compromis. Nous sélectionnons, torréfions et conditionnons chaque produit avec le plus grand soin.",
+        about_p2: "Que vous préfériez les capsules pour la praticité, les grains entiers pour le rituel, ou le vrac pour l'artisanat — Arabista offre une explosion de saveurs, à chaque fois.",
+        stat1_label: "Pur Arabica & Robusta", stat2_label: "Gammes de Produits", stat3_label: "Tasses par Sachet de 1kg", stat4_label: "Bons Matins",
+        products_label: "Notre Collection", products_title_1: "Trouvez votre ", products_title_em: "tasse parfaite",
+        products_sub: "Capsules, grains entiers, café moulu et torréfaction sur commande — chacun pensé pour un moment différent.",
+        cat1: "Arabista Ultime — Capsules 100% Aluminium · Compatible Nespresso®",
+        cat2: "Arabista — Capsules Aluminium + Plastique · Compatible Nespresso®",
+        cat3: "Café Moulu — Pur Espresso 100% Robusta",
+        cat4: "Café en Grains — 1kg · Sans Sucre Ajouté",
+        cat5: "Torréfaction sur Commande — Café Torréfié sur Mesure",
+        badge_alu: "100% Aluminium", badge_hybrid: "Aluminium + Plastique",
+        cap_gold_name: "Gold", cap_gold_sub: "Espresso · Aromatique", cap_gold_blend: "100% Arabica",
+        cap_gold_desc: "Le luxe du pur Arabica dans chaque capsule. Douceur de miel raffinée, notes florales délicates et corps soyeux.",
+        cap_gold_desc_hybrid: "Toute la richesse aromatique du pur Arabica — florale, douce et onctueuse — dans un format capsule plus accessible.",
+        cap_intense_name: "Intense", cap_intense_sub: "Espresso · Corsé", cap_intense_blend: "70% Robusta · 30% Arabica",
+        cap_intense_desc: "Corsé et sans compromis. Caractère torréfié profond, crema puissante et une finale espresso durable.",
+        cap_intense_desc_hybrid: "Corsé, sombre et puissant. Le même caractère Robusta intense dans une capsule pratique du quotidien.",
+        cap_classic_name: "Classic", cap_classic_sub: "Espresso · Équilibré", cap_classic_blend: "50% Arabica · 50% Robusta",
+        cap_classic_desc: "L'espresso quotidien parfait. Notes de caramel douces, corps équilibré et une finale nette et satisfaisante.",
+        cap_classic_desc_hybrid: "Équilibré et accessible. Votre espresso quotidien fiable, avec de douces notes de caramel et une finale onctueuse.",
+        intensity_label: "Intensité", compat_label: "Compatible Nespresso®",
+        bean1_name: "Café Moulu — 1kg", bean1_variety: "100% Robusta · Mouture Espresso · Détail",
+        bean1_desc: "Moulu à la consistance idéale pour l'espresso. Prêt à l'emploi — dans votre machine, cafetière moka ou dallah traditionnelle. 85 tasses par sachet.",
+        bean2_name: "Café Moulu — 5kg", bean2_variety: "100% Robusta · Mouture Espresso · Professionnel",
+        bean2_desc: "Le même café moulu espresso d'exception, en sachet professionnel de 5kg. Une qualité constante pour cafés, restaurants et usage intensif.",
+        tag_ground: "Moulu", tag_85cups: "×85 tasses", tag_espresso_grind: "Mouture Espresso", tag_professional: "Professionnel",
+        grain1_name: "En Grains — 100% Arabica", grain1_variety: "Pur Arabica · Sachet Orange",
+        grain1_desc: "Grains entiers d'Arabica torréfiés artisanalement, avec une acidité vive, des notes fruitées complexes et une finale douce et persistante. À moudre frais pour une saveur optimale.",
+        grain2_name: "En Grains — 100% Robusta", grain2_variety: "Pur Robusta · Sachet Violet",
+        grain2_desc: "Grains entiers de Robusta corsés et terreux, avec un corps plein, une crema puissante et une amertume riche. Idéal pour machines à espresso et cafetières moka.",
+        tag_wholebean: "Grains Entiers", tag_artisanal: "Artisanal",
+        roast_light_name: "Torréfaction Claire", roast_light_label: "Torréfaction Claire · Légère",
+        roast_light_desc: "Une torréfaction légère et délicate qui préserve la vivacité naturelle et le caractère d'origine du grain. Notes florales et fruitées vives, finale nette et proche du thé.",
+        roast_light_note: "Idéal pour filtre, pour-over et méthodes de spécialité",
+        roast_medium_name: "Torréfaction Moyenne", roast_medium_label: "Torréfaction Moyenne",
+        roast_medium_desc: "L'équilibre parfait entre acidité et corps. Douceur caramélisée, texture ronde en bouche et finale onctueuse — adaptée à quasiment toutes les méthodes de préparation.",
+        roast_medium_note: "Idéal pour espresso, cafetière moka et filtre",
+        roast_dark_name: "Torréfaction Noire", roast_dark_label: "Torréfaction Noire · Foncée",
+        roast_dark_desc: "Une torréfaction foncée et intense, à la profondeur fumée et légèrement amère, avec une finale corsée et persistante. Crema généreuse et caractère puissant pour les amateurs de café intense.",
+        roast_dark_note: "Idéal pour espresso, ristretto et cafés corsés",
+        roast_footer_note: "Toutes nos torréfactions sont disponibles sur commande — contactez-nous pour passer commande en précisant l'origine du grain (Arabica / Robusta / Mélange) et la quantité.",
+        contact_label: "Contactez-nous", contact_title_1: "Parlons ", contact_title_em: "café",
+        contact_intro: "Intéressé par nos produits, nos tarifs de gros ou une torréfaction sur mesure ? Contactez-nous — nous sommes toujours ravis de parler café.",
+        ci_phone: "Téléphone", ci_location: "Localisation", ci_location_value: "Algérie", ci_email: "E-mail", ci_instagram: "Instagram", ci_tiktok: "TikTok",
+        footer_copy: "© 2025 Arabista Coffee · Une Explosion de Saveurs",
+        footer_home: "Accueil", footer_products: "Produits", footer_contact: "Contact"
+      },
+      ar: {
+        nav_about: "من نحن", nav_products: "المنتجات", nav_contact: "اتصل بنا",
+        hero_eyebrow: "علامة قهوة جزائرية فاخرة",
+        hero_tagline: "ذوق يتجدد كل صباح",
+        hero_subtitle: "من مزيج الإسبريسو الغني إلى الكبسولات الفاخرة والحبوب الكاملة — لكل لحظة قهوة.",
+        hero_cta: "اكتشف مجموعتنا", hero_scroll: "مرر للأسفل",
+        about_label: "قصتنا", about_title_1: "شغف في ", about_title_em: "كل حبة",
+        about_p1: "تأسست أرابيستا على قناعة بسيطة: القهوة الرائعة يجب أن تكون في متناول الجميع دون أي تنازل. نختار مصادرنا، نحمّص، ونعبّئ كل منتج بعناية فائقة.",
+        about_p2: "سواء فضّلت الكبسولات لسهولة الاستخدام، أو الحبوب الكاملة للطقوس، أو الكميات الكبيرة للحرفية — تمنحك أرابيستا انفجارًا من النكهة في كل مرة.",
+        stat1_label: "أرابيكا وروبوستا نقية", stat2_label: "خطوط إنتاج", stat3_label: "كوب لكل كيس 1 كغ", stat4_label: "صباحات جميلة",
+        products_label: "مجموعتنا", products_title_1: "اعثر على ", products_title_em: "فنجانك المثالي",
+        products_sub: "كبسولات، حبوب كاملة، قهوة مطحونة، وقهوة محمّصة حسب الطلب — كل منتج مصمم للحظة مختلفة.",
+        cat1: "أرابيستا ألتيم — كبسولات ألمنيوم 100% · متوافقة مع Nespresso®",
+        cat2: "أرابيستا — كبسولات ألمنيوم وبلاستيك · متوافقة مع Nespresso®",
+        cat3: "قهوة مطحونة — إسبريسو نقي 100% روبوستا",
+        cat4: "حبوب القهوة الكاملة — 1 كغ · بدون سكر مضاف",
+        cat5: "التحميص حسب الطلب — قهوة محمّصة خصيصًا لك",
+        badge_alu: "ألمنيوم 100%", badge_hybrid: "ألمنيوم وبلاستيك",
+        cap_gold_name: "الذهبية", cap_gold_sub: "إسبريسو · عطري", cap_gold_blend: "100% أرابيكا",
+        cap_gold_desc: "فخامة الأرابيكا النقية في كل كبسولة. حلاوة عسل راقية، لمسات زهرية دقيقة، وقوام حريري ناعم.",
+        cap_gold_desc_hybrid: "كل الغنى العطري للأرابيكا النقية — زهري وحلو وناعم — في شكل كبسولة أكثر سهولة.",
+        cap_intense_name: "المكثفة", cap_intense_sub: "إسبريسو · قوي", cap_intense_blend: "70% روبوستا · 30% أرابيكا",
+        cap_intense_desc: "قوام كامل وبدون تنازلات. طابع تحميص عميق، كريما قوية، ونكهة إسبريسو تدوم طويلًا.",
+        cap_intense_desc_hybrid: "قوية وداكنة وجريئة. نفس طابع الروبوستا المكثف في كبسولة عملية للاستخدام اليومي.",
+        cap_classic_name: "الكلاسيكية", cap_classic_sub: "إسبريسو · متوازن", cap_classic_blend: "50% أرابيكا · 50% روبوستا",
+        cap_classic_desc: "الإسبريسو اليومي المثالي. نكهات كراميل ناعمة، قوام متوازن، ونهاية نظيفة ومُرضية.",
+        cap_classic_desc_hybrid: "متوازنة وسهلة الاستمتاع بها. إسبريسو يومي موثوق بنكهات كراميل لطيفة ونهاية ناعمة.",
+        intensity_label: "الشدة", compat_label: "متوافقة مع Nespresso®",
+        bean1_name: "قهوة مطحونة — 1 كغ", bean1_variety: "100% روبوستا · طحن إسبريسو · للتجزئة",
+        bean1_desc: "مطحونة مسبقًا بالقوام المثالي للإسبريسو. جاهزة في اللحظة التي تريدها — في آلتك، إبريق الموكا، أو الدلة التقليدية. 85 كوبًا لكل كيس.",
+        bean2_name: "قهوة مطحونة — 5 كغ", bean2_variety: "100% روبوستا · طحن إسبريسو · احترافي",
+        bean2_desc: "نفس القهوة المطحونة الاستثنائية بكيس احترافي سعة 5 كغ. جودة ثابتة للمقاهي والمطاعم والاستخدام بكميات كبيرة.",
+        tag_ground: "مطحونة", tag_85cups: "×85 كوب", tag_espresso_grind: "طحن إسبريسو", tag_professional: "احترافي",
+        grain1_name: "حبوب كاملة — 100% أرابيكا", grain1_variety: "أرابيكا نقية · كيس برتقالي",
+        grain1_desc: "حبوب أرابيكا كاملة محمّصة حرفيًا بحموضة زاهية، ونكهات فاكهية معقدة، ونهاية ناعمة تدوم. اطحنها طازجة للحصول على أفضل نكهة.",
+        grain2_name: "حبوب كاملة — 100% روبوستا", grain2_variety: "روبوستا نقية · كيس أرجواني",
+        grain2_desc: "حبوب روبوستا كاملة قوية وترابية بقوام كامل وكريما قوية ومرارة غنية. مثالية لآلات الإسبريسو وأباريق الموكا.",
+        tag_wholebean: "حبوب كاملة", tag_artisanal: "حرفي",
+        roast_light_name: "التحميص الفاتح", roast_light_label: "تحميص فاتح · خفيف",
+        roast_light_desc: "تحميص خفيف ودقيق يحافظ على النقاء الطبيعي والطابع الأصلي للحبة. نكهات زهرية وفاكهية زاهية بنهاية نظيفة تشبه الشاي.",
+        roast_light_note: "مثالي للفلتر، البور-أوفر، وطرق التحضير المتخصصة",
+        roast_medium_name: "التحميص المتوسط", roast_medium_label: "تحميص متوسط",
+        roast_medium_desc: "التوازن المثالي بين الحموضة والقوام. حلاوة الكراميل، ملمس دائري في الفم، ونهاية ناعمة — تناسب تقريبًا كل طرق التحضير.",
+        roast_medium_note: "مثالي للإسبريسو، إبريق الموكا، والفلتر",
+        roast_dark_name: "التحميص الداكن", roast_dark_label: "تحميص داكن · قوي",
+        roast_dark_desc: "تحميص داكن ومكثف بعمق مدخّن ومرّ حلو، ونهاية قوية تدوم طويلًا. كريما كاملة وطابع قوي لمن يأخذون قهوتهم على محمل الجد.",
+        roast_dark_note: "مثالي للإسبريسو، الريستريتو، والمشروبات القوية",
+        roast_footer_note: "جميع أنواع التحميص متوفرة حسب الطلب — تواصلوا معنا لتقديم طلبكم مع تحديد أصل الحبة (أرابيكا / روبوستا / مزيج) والكمية.",
+        contact_label: "تواصل معنا", contact_title_1: "لنتحدث عن ", contact_title_em: "القهوة",
+        contact_intro: "مهتم بمنتجاتنا، أسعار الجملة، أو تحميص خاص؟ تواصل معنا — يسعدنا دائمًا الحديث عن القهوة.",
+        ci_phone: "الهاتف", ci_location: "الموقع", ci_location_value: "الجزائر", ci_email: "البريد الإلكتروني", ci_instagram: "إنستغرام", ci_tiktok: "تيك توك",
+        footer_copy: "© 2025 أرابيستا كوفي · انفجار من النكهات",
+        footer_home: "الرئيسية", footer_products: "المنتجات", footer_contact: "اتصل بنا"
+      }
+    };
+
+    function setLanguage(lang) {
+      const dict = translations[lang] || translations.en;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key] !== undefined) el.textContent = dict[key];
+      });
+      document.documentElement.setAttribute('lang', lang);
+      document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+      });
+    }
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => setLanguage(btn.getAttribute('data-lang')));
+    });
+
+    setLanguage('en');
+  </script>
+
+</body>
+</html>
