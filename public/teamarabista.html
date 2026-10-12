@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Arabista — Commandes (équipe)</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --orange: #E8630A; --orange-light: #FF8C38; --bg: #0e0e0e; --panel: #171717; --line: rgba(255,255,255,0.1);
+    --text: #f4f4f4; --muted: rgba(244,244,244,0.55);
+    --s-new: #FF8C38; --s-confirmed: #5DADE2; --s-prepared: #AF7AC5; --s-delivered: #58D68D; --s-paid: #2ECC71; --s-cancelled: #7f8c8d;
+  }
+  body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.45; }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--orange-light); outline-offset: 2px; }
+  .hidden { display: none !important; }
+
+  header { position: sticky; top: 0; z-index: 10; background: rgba(14,14,14,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+  .bar { max-width: 960px; margin: 0 auto; padding: 0.7rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .brand { font-family: 'Italianno', 'Brush Script MT', cursive; font-size: 2rem; color: var(--orange); line-height: 1; }
+  .brand small { font-family: system-ui, sans-serif; font-size: 0.75rem; color: var(--muted); margin-left: 0.5rem; }
+  .tabs { display: flex; gap: 0.4rem; max-width: 960px; margin: 0 auto; padding: 0 1rem 0.7rem; }
+  .tab { flex: 1; background: transparent; border: 1px solid var(--line); border-radius: 6px; padding: 0.65rem; cursor: pointer; color: var(--muted); }
+  .tab[aria-selected="true"] { background: var(--orange); border-color: var(--orange); color: #fff; font-weight: 600; }
+  main { max-width: 960px; margin: 0 auto; padding: 1.2rem 1rem 5rem; }
+
+  .btn { appearance: none; border: 1px solid var(--line); background: var(--panel); border-radius: 6px; padding: 0.65rem 1rem; cursor: pointer; }
+  .btn:hover { border-color: var(--orange); }
+  .btn.primary { background: var(--orange); border-color: var(--orange); color: #fff; font-weight: 600; padding: 0.95rem 1.2rem; width: 100%; font-size: 1rem; }
+  .btn.primary:disabled { opacity: 0.55; }
+  .btn.small { padding: 0.4rem 0.7rem; font-size: 0.85rem; }
+
+  .login { max-width: 360px; margin: 18vh auto 0; padding: 0 1rem; display: grid; gap: 0.9rem; text-align: center; }
+  .login h1 { font-size: 1.2rem; font-weight: 600; }
+  .login p { color: var(--muted); font-size: 0.9rem; }
+
+  label { display: block; font-size: 0.82rem; color: var(--muted); margin-bottom: 0.3rem; }
+  input, select, textarea { width: 100%; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 0.75rem 0.8rem; font-size: 1rem; }
+  textarea { min-height: 76px; resize: vertical; }
+  option { background: #1b1b1b; }
+
+  .form { display: grid; gap: 1rem; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+  .sources { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .src { appearance: none; background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 0.55rem 1rem; cursor: pointer; color: var(--muted); }
+  .src[aria-pressed="true"] { background: var(--orange); border-color: var(--orange); color: #fff; font-weight: 600; }
+  .item { display: grid; grid-template-columns: 1fr 80px 42px; gap: 0.5rem; padding: 0.7rem; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); }
+  .item .extra { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .item .extra .cname { flex: 1 1 100%; }
+  .item .extra .bean { flex: 1 1 170px; }
+  .item .extra .price { flex: 1 1 130px; }
+  details.legal { border: 1px solid var(--line); border-radius: 6px; background: var(--panel); padding: 0.2rem 0.9rem; }
+  details.legal summary { cursor: pointer; padding: 0.7rem 0; font-weight: 600; }
+  details.legal .legal-body { display: grid; gap: 0.9rem; padding: 0.4rem 0 1rem; }
+  .card-legal { font-size: 0.85rem; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 0.5rem; }
+  .card-total { font-weight: 700; color: var(--orange-light); }
+  .item input, .item select { background: #101010; }
+  .rm { background: transparent; border: 1px solid var(--line); border-radius: 6px; cursor: pointer; color: var(--muted); }
+  .msg { padding: 0.8rem 1rem; border-radius: 6px; font-size: 0.92rem; }
+  .msg.err { background: rgba(192,57,43,0.15); border: 1px solid #c0392b; }
+  .msg.ok { background: rgba(46,204,113,0.12); border: 1px solid #2ecc71; }
+
+  .filters { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1rem; }
+  .filters input { flex: 2 1 200px; }
+  .filters select { flex: 1 1 130px; }
+  .counts { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; font-size: 0.82rem; }
+  .count { padding: 0.3rem 0.7rem; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .list { display: grid; gap: 0.8rem; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--c, var(--line)); border-radius: 6px; padding: 0.9rem 1rem; display: grid; gap: 0.5rem; }
+  .card-top { display: flex; justify-content: space-between; gap: 0.8rem; align-items: baseline; flex-wrap: wrap; }
+  .card-id { font-weight: 700; }
+  .card-meta { font-size: 0.8rem; color: var(--muted); }
+  .card-name { font-size: 1.05rem; font-weight: 600; }
+  .card-items { white-space: pre-line; font-size: 0.95rem; background: #101010; border-radius: 4px; padding: 0.55rem 0.7rem; }
+  .card-notes { font-size: 0.88rem; color: var(--muted); }
+  .card-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+  .card-actions select { width: auto; flex: 1 1 140px; padding: 0.5rem; font-size: 0.92rem; }
+  .card-actions a { text-decoration: none; color: var(--text); }
+  .empty { text-align: center; color: var(--muted); padding: 3rem 1rem; }
+
+  @media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login" id="login">
+  <div class="brand" style="font-size:3rem">Arabista</div>
+  <h1>Espace équipe</h1>
+  <p>Entrez le mot de passe de l'équipe pour saisir et suivre les commandes.</p>
+  <input id="keyInput" type="password" placeholder="Mot de passe équipe" autocomplete="current-password" />
+  <p class="msg err hidden" id="loginErr"></p>
+  <button class="btn primary" id="loginBtn">Entrer</button>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden">
+  <header>
+    <div class="bar">
+      <div class="brand">Arabista<small>équipe</small></div>
+      <button class="btn small" id="logout">Quitter</button>
+    </div>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="tabNew" aria-selected="true">Nouvelle commande</button>
+      <button class="tab" role="tab" id="tabList" aria-selected="false">Commandes <span id="newBadge"></span></button>
+    </div>
+  </header>
+
+  <main>
+    <!-- NEW ORDER -->
+    <section id="paneNew">
+      <form class="form" id="form" novalidate>
+        <div>
+          <label>D'où vient la commande ?</label>
+          <div class="sources" id="sources"></div>
+        </div>
+        <div class="grid2">
+          <div><label for="f_name">Nom du client</label><input id="f_name" autocomplete="off" maxlength="80" /></div>
+          <div><label for="f_phone">Téléphone</label><input id="f_phone" type="tel" inputmode="tel" autocomplete="off" maxlength="16" /></div>
+        </div>
+        <div class="grid2">
+          <div><label for="f_wilaya">Wilaya</label><select id="f_wilaya"></select></div>
+          <div><label for="f_address">Adresse / commune</label><input id="f_address" autocomplete="off" maxlength="200" /></div>
+        </div>
+        <div>
+          <label>Produits</label>
+          <div class="form" id="items"></div>
+          <button type="button" class="btn small" id="addItem" style="margin-top:0.6rem">+ Ajouter un produit</button>
+        </div>
+        <div><label for="f_total">Total de la commande en DA (facultatif — se calcule avec les prix, modifiable)</label><input id="f_total" type="number" inputmode="decimal" min="0" step="any" /></div>
+        <details class="legal" id="legal">
+          <summary>Facturation / infos légales (société, NIF, NIS…)</summary>
+          <div class="legal-body">
+            <div><label for="f_company">Raison sociale / nom de la société</label><input id="f_company" autocomplete="off" maxlength="120" /></div>
+            <div class="grid2">
+              <div><label for="f_nif">NIF</label><input id="f_nif" inputmode="numeric" autocomplete="off" maxlength="30" /></div>
+              <div><label for="f_nis">NIS</label><input id="f_nis" inputmode="numeric" autocomplete="off" maxlength="30" /></div>
+            </div>
+            <div class="grid2">
+              <div><label for="f_rc">N° RC (registre du commerce)</label><input id="f_rc" autocomplete="off" maxlength="40" /></div>
+              <div><label for="f_ai">N° AI (article d'imposition)</label><input id="f_ai" autocomplete="off" maxlength="30" /></div>
+            </div>
+          </div>
+        </details>
+        <div><label for="f_notes">Remarques (détails de la commande sur mesure, livraison…)</label><textarea id="f_notes" maxlength="300"></textarea></div>
+        <div><label for="f_by">Saisi par</label><input id="f_by" autocomplete="off" maxlength="40" placeholder="Ex : Papa, Sara, Boutique…" /></div>
+        <p class="msg err hidden" id="formErr" role="alert"></p>
+        <p class="msg ok hidden" id="formOk" role="status"></p>
+        <button class="btn primary" id="saveBtn" type="submit">Enregistrer la commande</button>
+      </form>
+    </section>
+
+    <!-- LIST -->
+    <section id="paneList" class="hidden">
+      <div class="filters">
+        <input id="q" type="search" placeholder="Rechercher nom, téléphone, produit, NIF…" />
+        <select id="fStatus" aria-label="Filtrer par statut"></select>
+        <select id="fSource" aria-label="Filtrer par source"></select>
+        <button class="btn" id="refresh">Actualiser</button>
+      </div>
+      <div class="counts" id="counts"></div>
+      <p class="msg err hidden" id="listErr"></p>
+      <div class="list" id="list"></div>
+    </section>
+  </main>
+</div>
+
+<script>
+/* >>> PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE (same one as the website) <<< */
+const API = 'https://script.google.com/macros/s/AKfycbxkLDMrVVXhZc40qVjfUrgg5t2xz3uvHCx2WlMYpmtCbAN2IBHtYrDamuLmHF-OAEdG_Q/exec';
+
+const STATUSES = ['New', 'Confirmed', 'Prepared', 'Delivered', 'Paid', 'Cancelled'];
+const STATUS_FR = { New: 'Nouvelle', Confirmed: 'Confirmée', Prepared: 'Préparée', Delivered: 'Livrée', Paid: 'Payée', Cancelled: 'Annulée' };
+const STATUS_COLOR = { New: 'var(--s-new)', Confirmed: 'var(--s-confirmed)', Prepared: 'var(--s-prepared)', Delivered: 'var(--s-delivered)', Paid: 'var(--s-paid)', Cancelled: 'var(--s-cancelled)' };
+const SOURCES = ['Shop', 'Phone', 'TikTok', 'Instagram', 'WhatsApp', 'Other'];
+const SOURCE_FR = { Shop: 'Boutique', Phone: 'Téléphone', TikTok: 'TikTok', Instagram: 'Instagram', WhatsApp: 'WhatsApp', Other: 'Autre', Website: 'Site web' };
+
+const PRODUCTS = [
+  { group: 'Capsules — Ultime (100% Aluminium)', items: [
+    { v: 'Ultime Gold capsules (100% Arabica)' }, { v: 'Ultime Intense capsules (70% Robusta / 30% Arabica)' }, { v: 'Ultime Classic capsules (50% / 50%)' } ] },
+  { group: 'Capsules — Aluminium + Plastique', items: [
+    { v: 'Gold capsules, alu+plastic (100% Arabica)' }, { v: 'Intense capsules, alu+plastic (70% Robusta / 30% Arabica)' }, { v: 'Classic capsules, alu+plastic (50% / 50%)' } ] },
+  { group: 'Café moulu (100% Robusta)', items: [ { v: 'Café moulu 1kg' }, { v: 'Café moulu 5kg (pro)' } ] },
+  { group: 'Café en grains 1kg', items: [ { v: 'En grains 100% Arabica 1kg' }, { v: 'En grains 100% Robusta 1kg' } ] },
+  { group: 'Torréfaction sur commande (qté en kg)', items: [
+    { v: 'Clear Roast (light)', roast: true }, { v: 'Medium Roast', roast: true }, { v: 'Black Roast (dark)', roast: true } ] },
+  { group: 'Autre', items: [ { v: '__custom__', label: '✏️ Produit sur mesure (à décrire)', custom: true } ] }
+];
+const WILAYAS = ['Adrar','Chlef','Laghouat','Oum El Bouaghi','Batna','Béjaïa','Biskra','Béchar','Blida','Bouira','Tamanrasset','Tébessa','Tlemcen','Tiaret','Tizi Ouzou','Alger','Djelfa','Jijel','Sétif','Saïda','Skikda','Sidi Bel Abbès','Annaba','Guelma','Constantine','Médéa','Mostaganem',"M'Sila",'Mascara','Ouargla','Oran','El Bayadh','Illizi','Bordj Bou Arréridj','Boumerdès','El Tarf','Tindouf','Tissemsilt','El Oued','Khenchela','Souk Ahras','Tipaza','Mila','Aïn Defla','Naâma','Aïn Témouchent','Ghardaïa','Relizane','Timimoun','Bordj Badji Mokhtar','Ouled Djellal','Béni Abbès','In Salah','In Guezzam','Touggourt','Djanet',"El M'Ghair",'El Meniaa'];
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+let KEY = sessionStorage.getItem('arabista_key') || '';
+let source = 'Phone';
+let orders = [];
+
+/* ---------- API ---------- */
+async function readJson(res) {
+  const txt = await res.text();
+  try { return JSON.parse(txt); }
+  catch (e) {
+    const err = new Error('NOT_JSON');
+    err.detail = 'HTTP ' + res.status + ' — réponse reçue : ' + txt.replace(/\s+/g, ' ').slice(0, 120);
+    throw err;
+  }
+}
+async function apiGet(params) {
+  const res = await fetch(API + '?' + new URLSearchParams(params));
+  return readJson(res);
+}
+async function apiPost(body) {
+  const res = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ ...body, key: KEY }) });
+  return readJson(res);
+}
+
+/* ---------- login ---------- */
+async function tryLogin(key) {
+  $('loginErr').classList.add('hidden');
+  if (API.indexOf('PASTE_') === 0) { showLoginErr("L'adresse API n'est pas configurée dans le fichier."); return; }
+  $('loginBtn').disabled = true;
+  try {
+    const out = await apiGet({ action: 'list', key });
+    if (!out.ok) { showLoginErr('Mot de passe incorrect.'); return; }
+    KEY = key; sessionStorage.setItem('arabista_key', key);
+    orders = out.orders;
+    $('login').classList.add('hidden'); $('app').classList.remove('hidden');
+    renderList();
+  } catch (e) { showLoginErr('Connexion impossible. Vérifiez internet. (détail : ' + (e && e.message ? e.message : e) + ')'); }
+  finally { $('loginBtn').disabled = false; }
+}
+function showLoginErr(m) { const e = $('loginErr'); e.textContent = m; e.classList.remove('hidden'); }
+$('loginBtn').addEventListener('click', () => tryLogin($('keyInput').value));
+$('keyInput').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin($('keyInput').value); });
+$('logout').addEventListener('click', () => { sessionStorage.removeItem('arabista_key'); location.reload(); });
+
+/* ---------- tabs ---------- */
+function showTab(name) {
+  const isNew = name === 'new';
+  $('paneNew').classList.toggle('hidden', !isNew); $('paneList').classList.toggle('hidden', isNew);
+  $('tabNew').setAttribute('aria-selected', isNew); $('tabList').setAttribute('aria-selected', !isNew);
+  if (!isNew) loadOrders();
+}
+$('tabNew').addEventListener('click', () => showTab('new'));
+$('tabList').addEventListener('click', () => showTab('list'));
+
+/* ---------- new order form ---------- */
+function buildSources() {
+  $('sources').innerHTML = SOURCES.map(s => `<button type="button" class="src" data-s="${s}" aria-pressed="${s === source}">${SOURCE_FR[s]}</button>`).join('');
+  $('sources').querySelectorAll('.src').forEach(b => b.addEventListener('click', () => { source = b.dataset.s; buildSources(); }));
+}
+function buildWilayas() {
+  $('f_wilaya').innerHTML = '<option value="">— Wilaya —</option>' + WILAYAS.map((w, i) => { const v = String(i + 1).padStart(2, '0') + ' - ' + w; return `<option value="${esc(v)}">${esc(v)}</option>`; }).join('');
+}
+function productOptions() {
+  return '<option value="">— Produit —</option>' + PRODUCTS.map(g => `<optgroup label="${esc(g.group)}">` + g.items.map(it => `<option value="${esc(it.v)}" data-roast="${it.roast ? 1 : 0}" data-custom="${it.custom ? 1 : 0}">${esc(it.label || it.v)}</option>`).join('') + '</optgroup>').join('');
+}
+function addItem() {
+  const row = document.createElement('div'); row.className = 'item';
+  row.innerHTML = `<select class="prod" aria-label="Produit">${productOptions()}</select>
+    <input class="qty" type="number" min="1" max="9999" value="1" inputmode="numeric" aria-label="Quantité" />
+    <button type="button" class="rm" aria-label="Supprimer">×</button>
+    <div class="extra">
+      <input class="cname hidden" maxlength="120" placeholder="Décrivez le produit sur mesure" aria-label="Produit sur mesure" />
+      <select class="bean hidden" aria-label="Type de grain"><option value="Arabica">Arabica</option><option value="Robusta">Robusta</option><option value="Blend">Mélange (Arabica + Robusta)</option></select>
+      <input class="price" type="number" min="0" step="any" inputmode="decimal" placeholder="Prix unitaire DA (facultatif)" aria-label="Prix unitaire en DA" />
+    </div>`;
+  const sel = row.querySelector('.prod');
+  sel.addEventListener('change', () => {
+    const o = sel.selectedOptions[0];
+    row.querySelector('.bean').classList.toggle('hidden', o.dataset.roast !== '1');
+    row.querySelector('.cname').classList.toggle('hidden', o.dataset.custom !== '1');
+  });
+  row.querySelectorAll('.qty, .price').forEach(i => i.addEventListener('input', updateTotal));
+  row.querySelector('.rm').addEventListener('click', () => { if ($('items').children.length > 1) row.remove(); else sel.value = ''; updateTotal(); });
+  $('items').appendChild(row);
+}
+let totalTouched = false;
+function updateTotal() {
+  if (totalTouched) return;
+  let sum = 0;
+  $('items').querySelectorAll('.item').forEach(r => { sum += (parseInt(r.querySelector('.qty').value, 10) || 0) * (parseFloat(r.querySelector('.price').value) || 0); });
+  $('f_total').value = sum > 0 ? sum : '';
+}
+$('f_total').addEventListener('input', () => { totalTouched = $('f_total').value !== ''; });
+$('addItem').addEventListener('click', addItem);
+
+function resetForm() {
+  ['f_name', 'f_phone', 'f_address', 'f_notes', 'f_total', 'f_company', 'f_nif', 'f_nis', 'f_rc', 'f_ai'].forEach(id => $(id).value = '');
+  totalTouched = false; $('legal').open = false;
+  $('f_wilaya').value = ''; $('items').innerHTML = ''; addItem();
+}
+function msg(id, text) { const e = $(id); e.textContent = text || ''; e.classList.toggle('hidden', !text); }
+
+$('form').addEventListener('submit', async (ev) => {
+  ev.preventDefault(); msg('formErr', ''); msg('formOk', '');
+  const lines = []; let badCustom = false;
+  $('items').querySelectorAll('.item').forEach(r => {
+    const p = r.querySelector('.prod'); if (!p.value) return;
+    const o = p.selectedOptions[0];
+    const q = Math.max(1, parseInt(r.querySelector('.qty').value, 10) || 1);
+    const price = parseFloat(r.querySelector('.price').value) || 0;
+    let name = p.value;
+    if (o.dataset.custom === '1') { name = r.querySelector('.cname').value.trim(); if (!name) { badCustom = true; return; } }
+    let line = o.dataset.roast === '1' ? `${q}kg × ${name} — ${r.querySelector('.bean').value}` : `${q} × ${name}`;
+    if (price) line += ` @ ${price} DA`;
+    lines.push(line);
+  });
+  if (badCustom) return msg('formErr', 'Décrivez le produit sur mesure (ou supprimez cette ligne).');
+  const phone = $('f_phone').value.replace(/[.\-()]/g, ' ').replace(/\s+/g, ' ').trim();
+  if (!$('f_name').value.trim() || !phone || !lines.length) return msg('formErr', 'Nom, téléphone et au moins un produit sont obligatoires.');
+  if (!/^\+?[0-9 ]{9,16}$/.test(phone)) return msg('formErr', 'Numéro de téléphone invalide.');
+  $('saveBtn').disabled = true; $('saveBtn').textContent = 'Enregistrement…';
+  try {
+    const by = $('f_by').value.trim(); if (by) localStorage.setItem('arabista_by', by);
+    const out = await apiPost({ action: 'create', source, name: $('f_name').value.trim(), phone, wilaya: $('f_wilaya').value, address: $('f_address').value.trim(), items: lines.join('\n'), notes: $('f_notes').value.trim(), takenBy: by, total: $('f_total').value, company: $('f_company').value.trim(), nif: $('f_nif').value.trim(), nis: $('f_nis').value.trim(), rc: $('f_rc').value.trim(), ai: $('f_ai').value.trim() });
+    if (!out.ok) throw new Error(out.error);
+    msg('formOk', `Commande ${out.id} enregistrée ✔`);
+    resetForm(); window.scrollTo({ top: 0, behavior: 'smooth' });
+  } catch (e) { msg('formErr', "Échec de l'enregistrement. Vérifiez internet et réessayez (ne notez pas sur papier avant d'avoir vu ✔)."); }
+  finally { $('saveBtn').disabled = false; $('saveBtn').textContent = 'Enregistrer la commande'; }
+});
+
+/* ---------- orders list ---------- */
+function buildFilters() {
+  $('fStatus').innerHTML = '<option value="">Tous les statuts</option>' + STATUSES.map(s => `<option value="${s}">${STATUS_FR[s]}</option>`).join('');
+  $('fSource').innerHTML = '<option value="">Toutes les sources</option>' + Object.keys(SOURCE_FR).map(s => `<option value="${s}">${SOURCE_FR[s]}</option>`).join('');
+  $('fStatus').value = ''; // the default view shows everything; use the counters to jump to a status
+}
+async function loadOrders() {
+  msg('listErr', '');
+  try {
+    const out = await apiGet({ action: 'list', key: KEY });
+    if (!out.ok) throw new Error(out.error);
+    orders = out.orders; renderList();
+  } catch (e) { msg('listErr', 'Impossible de charger les commandes. Vérifiez internet.'); }
+}
+function waLink(phone) {
+  let d = String(phone).replace(/[^0-9]/g, '');
+  if (d.startsWith('0')) d = '213' + d.slice(1);
+  return 'https://wa.me/' + d;
+}
+function renderList() {
+  const q = $('q').value.trim().toLowerCase(), fs = $('fStatus').value, fo = $('fSource').value;
+  const counts = {}; orders.forEach(o => counts[o.status] = (counts[o.status] || 0) + 1);
+  $('counts').innerHTML = STATUSES.map(s => `<span class="count" style="border-color:${STATUS_COLOR[s]}">${STATUS_FR[s]} : ${counts[s] || 0}</span>`).join('');
+  $('newBadge').textContent = counts.New ? `(${counts.New})` : '';
+  const shown = orders.filter(o =>
+    (!fs || o.status === fs) && (!fo || o.source === fo) &&
+    (!q || [o.name, o.phone, o.items, o.id, o.wilaya, o.company, o.nif, o.nis, o.rc, o.ai].join(' ').toLowerCase().includes(q)));
+  if (!shown.length) { $('list').innerHTML = '<p class="empty">Aucune commande à afficher.</p>'; return; }
+  $('list').innerHTML = shown.map(o => `
+    <article class="card" style="--c:${STATUS_COLOR[o.status] || 'var(--line)'}">
+      <div class="card-top"><span class="card-id">${esc(o.id)}</span><span class="card-meta">${esc(o.date)} · ${esc(SOURCE_FR[o.source] || o.source)}${o.takenBy ? ' · ' + esc(o.takenBy) : ''}</span></div>
+      <div class="card-name">${esc(o.name)} <span class="card-meta">· ${esc(o.wilaya)}${o.address ? ' · ' + esc(o.address) : ''}</span></div>
+      <div class="card-items">${esc(o.items)}</div>
+      ${o.total ? `<div class="card-total">Total : ${esc(o.total)} DA</div>` : ''}
+      ${(o.company || o.nif || o.nis || o.rc || o.ai) ? `<div class="card-legal">${[o.company && 'Société : ' + esc(o.company), o.nif && 'NIF ' + esc(o.nif), o.nis && 'NIS ' + esc(o.nis), o.rc && 'RC ' + esc(o.rc), o.ai && 'AI ' + esc(o.ai)].filter(Boolean).join(' · ')}</div>` : ''}
+      ${o.notes ? `<div class="card-notes">Remarque : ${esc(o.notes)}</div>` : ''}
+      <div class="card-actions">
+        <select data-id="${esc(o.id)}" aria-label="Statut de ${esc(o.id)}">${STATUSES.map(s => `<option value="${s}" ${s === o.status ? 'selected' : ''}>${STATUS_FR[s]}</option>`).join('')}</select>
+        <a class="btn small" href="tel:${esc(o.phone)}">Appeler</a>
+        <a class="btn small" href="${waLink(o.phone)}" target="_blank" rel="noopener">WhatsApp</a>
+      </div>
+    </article>`).join('');
+  $('list').querySelectorAll('select[data-id]').forEach(sel => sel.addEventListener('change', async () => {
+    const id = sel.dataset.id, prev = orders.find(o => o.id === id).status;
+    sel.disabled = true;
+    try {
+      const out = await apiPost({ action: 'update', id, status: sel.value });
+      if (!out.ok) throw new Error(out.error);
+      orders.find(o => o.id === id).status = sel.value; renderList();
+    } catch (e) { sel.value = prev; sel.disabled = false; msg('listErr', 'Le statut n\'a pas pu être changé. Réessayez.'); }
+  }));
+}
+['q', 'fStatus', 'fSource'].forEach(id => $(id).addEventListener('input', renderList));
+$('refresh').addEventListener('click', loadOrders);
+
+/* ---------- init ---------- */
+buildSources(); buildWilayas(); buildFilters(); addItem();
+$('f_by').value = localStorage.getItem('arabista_by') || '';
+if (KEY) tryLogin(KEY);
+</script>
+</body>
+</html>
