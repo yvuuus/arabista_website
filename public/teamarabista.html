@@ -16,6 +16,7 @@
   button, input, select, textarea { font: inherit; color: inherit; }
   :focus-visible { outline: 2px solid var(--orange-light); outline-offset: 2px; }
   .hidden { display: none !important; }
+  input::-ms-reveal, input::-ms-clear { display: none; }
 
   header { position: sticky; top: 0; z-index: 10; background: rgba(14,14,14,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
   .bar { max-width: 960px; margin: 0 auto; padding: 0.7rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
@@ -90,7 +91,10 @@
   <div class="brand" style="font-size:3rem">Arabista</div>
   <h1>Espace équipe</h1>
   <p>Entrez le mot de passe de l'équipe pour saisir et suivre les commandes.</p>
-  <input id="keyInput" type="password" placeholder="Mot de passe équipe" autocomplete="current-password" />
+  <div style="position:relative">
+    <input id="keyInput" type="password" placeholder="Mot de passe équipe" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" style="padding-right:6rem" />
+    <button type="button" class="btn small" id="togglePw" aria-label="Afficher le mot de passe" style="position:absolute;right:6px;top:50%;transform:translateY(-50%)">Afficher</button>
+  </div>
   <p class="msg err hidden" id="loginErr"></p>
   <button class="btn primary" id="loginBtn">Entrer</button>
 </div>
@@ -231,8 +235,14 @@ async function tryLogin(key) {
   finally { $('loginBtn').disabled = false; }
 }
 function showLoginErr(m) { const e = $('loginErr'); e.textContent = m; e.classList.remove('hidden'); }
-$('loginBtn').addEventListener('click', () => tryLogin($('keyInput').value));
-$('keyInput').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin($('keyInput').value); });
+$('loginBtn').addEventListener('click', () => tryLogin($('keyInput').value.trim()));
+$('keyInput').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin($('keyInput').value.trim()); });
+$('togglePw').addEventListener('click', () => {
+  const inp = $('keyInput'), show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  $('togglePw').textContent = show ? 'Masquer' : 'Afficher';
+  $('togglePw').setAttribute('aria-label', show ? 'Masquer le mot de passe' : 'Afficher le mot de passe');
+});
 $('logout').addEventListener('click', () => { sessionStorage.removeItem('arabista_key'); location.reload(); });
 
 /* ---------- tabs ---------- */
