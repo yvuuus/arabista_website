@@ -172,6 +172,19 @@
 </div>
 
 <script>
+/* Safe storage: some browsers (in-app browsers, private mode) block it and would otherwise crash the whole page */
+const safe = {
+  sget(k) { try { return sessionStorage.getItem(k) || ''; } catch (e) { return ''; } },
+  sset(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} },
+  sdel(k) { try { sessionStorage.removeItem(k); } catch (e) {} },
+  lget(k) { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } },
+  lset(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+};
+/* If anything else ever goes wrong, show it on screen instead of failing silently */
+window.addEventListener('error', function (ev) {
+  var box = document.getElementById('loginErr');
+  if (box) { box.textContent = 'Erreur technique : ' + (ev.message || 'inconnue') + ' — ouvrez la page dans Chrome ou Safari (pas dans WhatsApp/Facebook/Instagram).'; box.classList.remove('hidden'); }
+});
 /* >>> PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE (same one as the website) <<< */
 const API = 'https://script.google.com/macros/s/AKfycbxkLDMrVVXhZc40qVjfUrgg5t2xz3uvHCx2WlMYpmtCbAN2IBHtYrDamuLmHF-OAEdG_Q/exec';
 
@@ -196,7 +209,7 @@ const WILAYAS = ['Adrar','Chlef','Laghouat','Oum El Bouaghi','Batna','Béjaïa',
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-let KEY = sessionStorage.getItem('arabista_key') || '';
+let KEY = safe.sget('arabista_key');
 let source = 'Phone';
 let orders = [];
 
@@ -227,7 +240,7 @@ async function tryLogin(key) {
   try {
     const out = await apiGet({ action: 'list', key });
     if (!out.ok) { showLoginErr('Mot de passe incorrect.'); return; }
-    KEY = key; sessionStorage.setItem('arabista_key', key);
+    KEY = key; safe.sset('arabista_key', key);
     orders = out.orders;
     $('login').classList.add('hidden'); $('app').classList.remove('hidden');
     renderList();
@@ -243,7 +256,7 @@ $('togglePw').addEventListener('click', () => {
   $('togglePw').textContent = show ? 'Masquer' : 'Afficher';
   $('togglePw').setAttribute('aria-label', show ? 'Masquer le mot de passe' : 'Afficher le mot de passe');
 });
-$('logout').addEventListener('click', () => { sessionStorage.removeItem('arabista_key'); location.reload(); });
+$('logout').addEventListener('click', () => { safe.sdel('arabista_key'); location.reload(); });
 
 /* ---------- tabs ---------- */
 function showTab(name) {
@@ -323,7 +336,7 @@ $('form').addEventListener('submit', async (ev) => {
   if (!/^\+?[0-9 ]{9,16}$/.test(phone)) return msg('formErr', 'Numéro de téléphone invalide.');
   $('saveBtn').disabled = true; $('saveBtn').textContent = 'Enregistrement…';
   try {
-    const by = $('f_by').value.trim(); if (by) localStorage.setItem('arabista_by', by);
+    const by = $('f_by').value.trim(); if (by) safe.lset('arabista_by', by);
     const out = await apiPost({ action: 'create', source, name: $('f_name').value.trim(), phone, wilaya: $('f_wilaya').value, address: $('f_address').value.trim(), items: lines.join('\n'), notes: $('f_notes').value.trim(), takenBy: by, total: $('f_total').value, company: $('f_company').value.trim(), nif: $('f_nif').value.trim(), nis: $('f_nis').value.trim(), rc: $('f_rc').value.trim(), ai: $('f_ai').value.trim() });
     if (!out.ok) throw new Error(out.error);
     msg('formOk', `Commande ${out.id} enregistrée ✔`);
@@ -389,7 +402,7 @@ $('refresh').addEventListener('click', loadOrders);
 
 /* ---------- init ---------- */
 buildSources(); buildWilayas(); buildFilters(); addItem();
-$('f_by').value = localStorage.getItem('arabista_by') || '';
+$('f_by').value = safe.lget('arabista_by');
 if (KEY) tryLogin(KEY);
 </script>
 </body>
